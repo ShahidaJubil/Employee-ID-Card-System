@@ -6,12 +6,6 @@ Frontend/employee-id-frontend/node_modules/
 Frontend/employee-id-frontend/build/
 Backend/dist/
 
-# Logs
-*.log
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-
 # Environment variables
 .env
 Frontend/employee-id-frontend/.env
@@ -20,6 +14,12 @@ Backend/.env
 .env.development.local
 .env.test.local
 .env.production.local
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
 
 # VS Code settings
 .vscode/
