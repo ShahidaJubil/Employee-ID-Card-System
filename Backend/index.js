@@ -11,17 +11,21 @@ dotenv.config();
 const app = express();
 
 // Middleware
-// app.use(cors({
-//   origin: "*", // allow all origins
-//   methods: ["GET", "POST", "PUT", "DELETE"],
-//   credentials: true
-// }));
+
+app.use(
+  cors({
+    origin: "*", // or remove entirely if same origin
+    methods: ["GET", "POST", "PUT", "DELETE"],
+  })
+);
+
 app.use(
   cors({
     origin: "http://localhost:3000",
     methods: ["GET", "POST", "PUT", "DELETE"],
   })
 );
+
 
 app.use(express.json());
 app.use("/uploads", express.static("uploads"));
