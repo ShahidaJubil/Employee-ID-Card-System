@@ -11,25 +11,21 @@ dotenv.config();
 const app = express();
 
 // Middleware
-
-app.use(
-  cors({
-    origin: "*", // or remove entirely if same origin
-    methods: ["GET", "POST", "PUT", "DELETE"],
-  })
-);
-
-app.use(
-  cors({
-    origin: "http://localhost:3000",
-    methods: ["GET", "POST", "PUT", "DELETE"],
-  })
-);
-
+app.use(cors({
+  origin: "*", // allow all origins; adjust if needed
+  methods: ["GET", "POST", "PUT", "DELETE"],
+}));
 
 app.use(express.json());
-app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
+// ✅ Serve uploaded images first, with CORS headers
+const uploadsPath = path.join(__dirname, "uploads");
+console.log("Uploads path:", uploadsPath); // Debug: check path in Render
+app.use("/uploads", express.static(uploadsPath, {
+  setHeaders: (res) => {
+    res.setHeader("Access-Control-Allow-Origin", "*");
+  },
+}));
 
 // Connect to MongoDB
 mongoose.connect(process.env.MONGO_URI, {
@@ -43,10 +39,11 @@ mongoose.connect(process.env.MONGO_URI, {
 app.use("/api/auth", authRoutes);
 app.use("/api/employees", employeeRoutes);
 
-// Serve React frontend
-app.use(express.static(path.join(__dirname, "../Frontend/employee-id-frontend/build")));
+// ✅ Serve React frontend (build folder)
+const frontendBuildPath = path.join(__dirname, "../Frontend/employee-id-frontend/build");
+app.use(express.static(frontendBuildPath));
 app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "../Frontend/employee-id-frontend/build", "index.html"));
+  res.sendFile(path.join(frontendBuildPath, "index.html"));
 });
 
 // Start server
