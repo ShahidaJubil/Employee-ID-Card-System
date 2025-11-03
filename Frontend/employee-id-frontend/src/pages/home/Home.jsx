@@ -10,23 +10,19 @@ export default function Home() {
   const [employees, setEmployees] = useState([]);
   const [selectedEmployee, setSelectedEmployee] = useState(null);
 
-  // useEffect(() => {
-  //   const user = JSON.parse(localStorage.getItem("user"));
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("user"));
 
-  //   if (!user) {
-  //     navigate("/login");
-  //     return;
-  //   }
+    if (!user) {
+      navigate("/login");
+      return;
+    }
 
-  //   api
-  //     .get(`/employees/${user._id}`)
-  //     .then((res) => setEmployees(res.data))
-  //     .catch((err) => console.error(err));
-  // }, [navigate]);
-useEffect(() => {
-  const user = JSON.parse(localStorage.getItem("user"));
-  if (!user) navigate("/login");
-}, [navigate]);
+    api
+      .get(`/employees/${user._id}`)
+      .then((res) => setEmployees(res.data))
+      .catch((err) => console.error(err));
+  }, [navigate]);
 
   const handleEmployeeClick = (emp) => {
     setSelectedEmployee(emp);
