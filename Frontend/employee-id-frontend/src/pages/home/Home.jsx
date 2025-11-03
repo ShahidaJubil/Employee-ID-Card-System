@@ -1,9 +1,9 @@
-import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import './Home.css';
-import api from '../../api';
-import Navbar from '../../components/navbar/Navbar';
-import EmployeeDetails from '../employeeDetails/EmployeeDetails';
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import "./Home.css";
+import api from "../../api";
+import Navbar from "../../components/navbar/Navbar";
+import EmployeeDetails from "../employeeDetails/EmployeeDetails";
 
 export default function Home() {
   const navigate = useNavigate();
@@ -11,18 +11,17 @@ export default function Home() {
   const [selectedEmployee, setSelectedEmployee] = useState(null);
 
   useEffect(() => {
-    const user = JSON.parse(localStorage.getItem('user'));
+    const user = JSON.parse(localStorage.getItem("user"));
 
     if (!user) {
-      // Redirect to login if not logged in
-      navigate('/login');
+      navigate("/login");
       return;
     }
 
-
-    api.get(`/employees/${user._id}`)
-      .then(res => setEmployees(res.data))
-      .catch(err => console.error(err));
+    api
+      .get(`/employees/${user._id}`)
+      .then((res) => setEmployees(res.data))
+      .catch((err) => console.error(err));
   }, [navigate]);
 
   const handleEmployeeClick = (emp) => {
@@ -38,24 +37,41 @@ export default function Home() {
       <Navbar />
       <div className="home-container">
         <h2>Employees</h2>
-        <ul className="employee-list">
-          {employees.length > 0 ? (
-            employees.map(emp => (
-              <li
-                key={emp._id}
-                className="employee-line-item"
-                onClick={() => handleEmployeeClick(emp)}
-              >
-                <span><strong>{emp.name}</strong></span> | 
-                <span>{emp.designation}</span> | 
-                <span>ID: {emp.employeeCode}</span> | 
-                <span>Dept: {emp.department}</span>
-              </li>
-            ))
-          ) : (
-            <p>No employees found.</p>
-          )}
-        </ul>
+
+        {employees.length > 0 ? (
+          <div className="employee-table-wrapper">
+  <table className="employee-table">
+    <thead>
+      <tr>
+        <th>Employee Name</th>
+        <th>Department</th>
+        <th>Designation</th>
+        <th>More Details</th>
+      </tr>
+    </thead>
+    <tbody>
+      {employees.map((emp) => (
+        <tr key={emp._id}>
+          <td>{emp.name}</td>
+          <td>{emp.department}</td>
+          <td>{emp.designation}</td>
+          <td>
+            <button
+              className="view-btn"
+              onClick={() => handleEmployeeClick(emp)}
+            >
+              View Details
+            </button>
+          </td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+</div>
+
+        ) : (
+          <p>No employees found.</p>
+        )}
       </div>
 
       {/* Employee Details Modal */}

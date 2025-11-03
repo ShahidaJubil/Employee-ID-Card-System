@@ -1,7 +1,15 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import './Login.css';
+import {
+  TextField,
+  Button,
+  Box,
+  Paper,
+  Typography,
+  Stack
+} from '@mui/material';
 import api from '../../api';
+import './Login.css';
 
 export default function Login() {
   const [form, setForm] = useState({ email: '', password: '' });
@@ -17,7 +25,6 @@ export default function Login() {
 
     try {
       const res = await api.post('/auth/login', form);
-
       console.log("Login response:", res.data);
 
       if (res.data.message === 'Invalid credentials') {
@@ -25,12 +32,13 @@ export default function Login() {
         return;
       }
 
-      // Store token and user 
+      // Save token and user info
       localStorage.setItem('token', res.data.token);
       localStorage.setItem('user', JSON.stringify(res.data.user));
 
-      alert(`Welcome back, ${res.data.user.name}!`);
+      // Directly navigate to home page
       navigate('/home');
+
     } catch (err) {
       console.error("Login error:", err);
       alert('Error during login. Please try again.');
@@ -38,38 +46,54 @@ export default function Login() {
   };
 
   return (
-    <div className="auth-container">
-      <form className="auth-form" onSubmit={handleSubmit}>
-        <h2>Login</h2>
-
-        <input
-          className="input-field"
-          type="email"
-          name="email"
-          placeholder="Email"
-          value={form.email}
-          onChange={handleChange}
-          required
-        />
-
-        <input
-          className="input-field"
-          type="password"
-          name="password"
-          placeholder="Password"
-          value={form.password}
-          onChange={handleChange}
-          required
-        />
-
-        <button className="button" type="submit">
+    <Box className="login-container">
+      <Paper
+        elevation={6}
+        className="login-paper"
+        sx={{ m: { xs: 1, sm: 2, md: 4 } }}
+      >
+        <Typography variant="h5" gutterBottom className="login-title">
           Login
-        </button>
-
-        <p className="signup-link">
-          Don't have an account? <Link to="/signup">Sign up</Link>
-        </p>
-      </form>
-    </div>
+        </Typography>
+        <br />
+        <Box component="form" onSubmit={handleSubmit}>
+          <Stack spacing={2}>
+            <TextField
+              label="Email"
+              name="email"
+              type="email"
+              fullWidth
+              value={form.email}
+              onChange={handleChange}
+              required
+            />
+            <TextField
+              label="Password"
+              name="password"
+              type="password"
+              fullWidth
+              value={form.password}
+              onChange={handleChange}
+              required
+            />
+            <Button
+              type="submit"
+              variant="contained"
+              fullWidth
+              className="login-button"
+            >
+              Login
+            </Button>
+          </Stack>
+        </Box>
+        <br />
+        <Typography className="signup-text">
+          Don't have an account?{' '}
+          <Link to="/signup" className="signup-link">
+            Sign up
+          </Link>
+        </Typography>
+      </Paper>
+    </Box>
   );
 }

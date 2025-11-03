@@ -1,47 +1,38 @@
-.auth-container {
+.signup-container {
+  height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 80vh;
+  background: linear-gradient(135deg,#1b3b5b, #2c7aba,#5887ad);
 }
 
-.auth-form {
-  background-color: #fff;
-  padding: 40px 30px;
-  border-radius: 12px;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.2);
-  width: 100%;
-  max-width: 400px;
+.signup-paper {
+  width: 360px;
+  padding: 2rem;
+  border-radius: 16px;
   text-align: center;
+  backdrop-filter: blur(10px);
 }
 
-.auth-form h2 {
-  margin-bottom: 20px;
+.signup-title {
+  font-weight: bold;
   color: #1976d2;
 }
 
-.input-field {
-  width: 100%;
-  padding: 12px;
-  margin: 12px 0;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  font-size: 16px;
+.signup-button {
+  padding: 10px 0;
+  font-weight: bold !important;
 }
 
-.button {
-  background-color: #1976d2;
-  color: #fff;
-  border: none;
-  padding: 12px 20px;
-  cursor: pointer;
-  border-radius: 6px;
-  font-size: 16px;
-  margin-top: 10px;
-  width: 100%;
-  transition: 0.3s;
+.login-link-text {
+  margin-top: 16px;
 }
 
-.button:hover {
-  background-color: #115293;
+.login-link {
+  text-decoration: none;
+  color: #1976d2;
+}
+
+.login-link:hover {
+  text-decoration: underline;
 }

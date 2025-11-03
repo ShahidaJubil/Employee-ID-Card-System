@@ -1,0 +1,39 @@
+.login-container {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #1b3b5b, #2c7aba,#5887ad);
+}
+
+.login-paper {
+  width: 360px;
+  padding: 2rem;
+  border-radius: 16px;
+  text-align: center;
+  backdrop-filter: blur(10px);
+}
+
+.login-title {
+  font-weight: bold;
+  color: #1976d2;
+}
+
+.login-button {
+  padding: 10px 0;
+  font-weight: bold !important;
+}
+
+.signup-text {
+  margin-top: 16px;
+}
+
+.signup-link {
+  text-decoration: none;
+  color: #1976d2;
+  font-weight: 500;
+}
+
+.signup-link:hover {
+  text-decoration: underline;
+}
