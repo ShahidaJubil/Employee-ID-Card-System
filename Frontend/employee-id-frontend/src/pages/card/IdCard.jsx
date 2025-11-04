@@ -60,7 +60,7 @@ export default function IdCard({ emp }) {
 
         <div className="id-card-info">
           <h2>
-            {emp.name?.split(" ")[0]} <span>{emp.name?.split(" ")[1] || ""}</span>
+            {emp.name}
           </h2>
           <p>{emp.designation}</p>
 

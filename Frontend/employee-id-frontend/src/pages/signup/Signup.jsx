@@ -1,28 +1,13 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import {
-  TextField,
-  Button,
-  Box,
-  Paper,
-  Typography,
-  Stack,
-} from "@mui/material";
+import {TextField,Button, Box,Paper,Typography,Stack,} from "@mui/material";
 import api from "../../api";
 import "./Signup.css";
 
 export default function Signup() {
-  const [form, setForm] = useState({
-    email: "",
-    password: "",
-    confirmPassword: "",
-  });
+  const [form, setForm] = useState({email: "",password: "",confirmPassword: "",});
 
-  const [errors, setErrors] = useState({
-    email: "",
-    password: "",
-    confirmPassword: "",
-  });
+  const [errors, setErrors] = useState({email: "",password: "",confirmPassword: "",});
 
   const [success, setSuccess] = useState("");
   const navigate = useNavigate();
@@ -38,27 +23,26 @@ export default function Signup() {
     setSuccess("");
   };
 
-  //  Instant validation for all fields (email included)
+  //  Instant validation for all fields
   const handleBlur = (e) => {
-  const { name, value } = e.target;
-  let message = "";
+    const { name, value } = e.target;
+    let message = "";
 
-  if (name === "email" && !validateEmail(value)) {
-    message = "Please enter a valid email address.";
-  }
+    if (name === "email" && !validateEmail(value)) {
+      message = "Please enter a valid email address.";
+    }
 
-  if (name === "password" && !validatePassword(value)) {
-    message =
-      "Password must be at least 8 characters long and include both letters and numbers.";
-  }
+    if (name === "password" && !validatePassword(value)) {
+      message =
+        "Password must be at least 8 characters long and include both letters and numbers.";
+    }
 
-  if (name === "confirmPassword" && value !== form.password) {
-    message = "Passwords do not match.";
-  }
+    if (name === "confirmPassword" && value !== form.password) {
+      message = "Passwords do not match.";
+    }
 
-  setErrors((prev) => ({ ...prev, [name]: message }));
-};
-
+    setErrors((prev) => ({ ...prev, [name]: message }));
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -115,14 +99,17 @@ export default function Signup() {
 
   return (
     <Box className="signup-container">
-      <Paper elevation={6} className="signup-paper" sx={{ m: { xs: 1, sm: 2, md: 4 } }}>
+      <Paper
+        elevation={6}
+        className="signup-paper"
+        sx={{ m: { xs: 1, sm: 2, md: 4 } }}
+      >
         <Typography variant="h5" gutterBottom className="signup-title">
           Sign Up
         </Typography>
 
         <Box component="form" onSubmit={handleSubmit}>
           <Stack spacing={2} mt={2}>
-            {/* Email Field */}
             <TextField
               label="Email"
               name="email"
@@ -140,7 +127,7 @@ export default function Signup() {
               }
             />
 
-            {/* Password Field */}
+
             <TextField
               label="Password"
               name="password"
@@ -158,7 +145,7 @@ export default function Signup() {
               }
             />
 
-            {/* Confirm Password Field */}
+
             <TextField
               label="Confirm Password"
               name="confirmPassword"
@@ -182,12 +169,17 @@ export default function Signup() {
               </Typography>
             )}
 
-            <Button type="submit" variant="contained" fullWidth className="signup-button">
+            <Button
+              type="submit"
+              variant="contained"
+              fullWidth
+              className="signup-button"
+            >
               Sign Up
             </Button>
           </Stack>
         </Box>
-<br />
+        <br />
         <Typography className="login-link-text">
           Already have an account?{" "}
           <Link to="/login" className="login-link">

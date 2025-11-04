@@ -1,26 +1,17 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import {
-  TextField,
-  Button,
-  Box,
-  Paper,
-  Typography,
-  Stack,
-  Alert,
-} from "@mui/material";
+import {TextField, Button,Box, Paper, Typography,Stack,Alert,} from "@mui/material";
 import api from "../../api";
 import "./Login.css";
 
 export default function Login() {
   const [form, setForm] = useState({ email: "", password: "" });
   const [errors, setErrors] = useState({});
-  const [alertMsg, setAlertMsg] = useState(""); // For invalid credentials or server error
+  const [alertMsg, setAlertMsg] = useState(""); //  invalid credentials 
   const navigate = useNavigate();
 
   //  Email validation
-  const validateEmail = (email) =>
-    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -63,15 +54,17 @@ export default function Login() {
       const res = await api.post("/auth/login", form);
 
       if (res.data.message === "Invalid credentials") {
-        setAlertMsg("Invalid credentials. Please check your email or password.");
+        setAlertMsg(
+          "Invalid credentials. Please check your email or password."
+        );
         return;
       }
 
-      //  Save token and user info
+
       localStorage.setItem("token", res.data.token);
       localStorage.setItem("user", JSON.stringify(res.data.user));
 
-      //  Navigate to home
+
       navigate("/home", { replace: true });
     } catch (err) {
       console.error("Login error:", err);
@@ -109,7 +102,7 @@ export default function Login() {
               }
             />
 
-            {/* Password Field */}
+        
             <TextField
               label="Password"
               name="password"
@@ -126,7 +119,7 @@ export default function Login() {
               }
             />
 
-            {/* MUI Alert for login errors */}
+           
             {alertMsg && (
               <Alert severity="error" sx={{ fontSize: "0.9rem" }}>
                 {alertMsg}

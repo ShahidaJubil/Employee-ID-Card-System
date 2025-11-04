@@ -11,16 +11,15 @@
 /* Table Wrapper - Horizontal Scroll */
 .employee-table-wrapper {
   width: 100%;
-  overflow-x: auto; 
-  -webkit-overflow-scrolling: touch; 
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
   box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
   border-radius: 10px;
 }
 
-/* Table  */
 .employee-table {
   width: 100%;
-  min-width: 600px; 
+  min-width: 600px;
   border-collapse: collapse;
   background: #f9fbff;
 }
@@ -45,7 +44,6 @@
 .employee-table tr:hover {
   background-color: #eef4ff;
 }
-
 
 .view-btn {
   background: linear-gradient(135deg, #0b397d, #1b5ec8);

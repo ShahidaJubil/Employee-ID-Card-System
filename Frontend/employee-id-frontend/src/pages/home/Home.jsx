@@ -40,35 +40,34 @@ export default function Home() {
 
         {employees.length > 0 ? (
           <div className="employee-table-wrapper">
-  <table className="employee-table">
-    <thead>
-      <tr>
-        <th>Employee Name</th>
-        <th>Department</th>
-        <th>Designation</th>
-        <th>More Details</th>
-      </tr>
-    </thead>
-    <tbody>
-      {employees.map((emp) => (
-        <tr key={emp._id}>
-          <td>{emp.name}</td>
-          <td>{emp.department}</td>
-          <td>{emp.designation}</td>
-          <td>
-            <button
-              className="view-btn"
-              onClick={() => handleEmployeeClick(emp)}
-            >
-              View Details
-            </button>
-          </td>
-        </tr>
-      ))}
-    </tbody>
-  </table>
-</div>
-
+            <table className="employee-table">
+              <thead>
+                <tr>
+                  <th>Employee Name</th>
+                  <th>Department</th>
+                  <th>Designation</th>
+                  <th>More Details</th>
+                </tr>
+              </thead>
+              <tbody>
+                {employees.map((emp) => (
+                  <tr key={emp._id}>
+                    <td>{emp.name}</td>
+                    <td>{emp.department}</td>
+                    <td>{emp.designation}</td>
+                    <td>
+                      <button
+                        className="view-btn"
+                        onClick={() => handleEmployeeClick(emp)}
+                      >
+                        View Details
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         ) : (
           <p>No employees found.</p>
         )}

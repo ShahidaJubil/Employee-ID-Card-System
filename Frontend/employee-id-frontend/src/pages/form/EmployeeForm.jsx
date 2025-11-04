@@ -1,12 +1,5 @@
 import { useState } from 'react';
-import {
-  TextField,
-  Button,
-  Box,
-  Paper,
-  Typography,
-  Stack,
-} from '@mui/material';
+import { TextField, Button, Box,  Paper,Typography,Stack,} from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import api from '../../api';
 import Navbar from '../../components/navbar/Navbar';
@@ -14,22 +7,13 @@ import './EmployeeForm.css';
 import { MdUpload } from "react-icons/md";
 
 export default function EmployeeForm() {
-  const [form, setForm] = useState({
-    name: '',
-    designation: '',
-    department: '',
-    employeeCode: '',
-    contact: '',
-    email: '',
-    address: '',
-    joiningDate: '',
-    photo: null,
-  });
+  const [form, setForm] = useState({ name: '',  designation: '', department: '',  employeeCode: '', 
+     contact: '', email: '', address: '',joiningDate: '',photo: null,});
 
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
 
-  // --- Validation logic ---
+  //  Validation 
   const validateField = (name, value) => {
     switch (name) {
       case 'name':
@@ -63,19 +47,18 @@ export default function EmployeeForm() {
     }
   };
 
-  // --- Handle changes + real-time validation + unique ID check ---
+
+  
   const handleChange = async (e) => {
     const { name, value, files } = e.target;
     const fieldValue = name === 'photo' ? files[0] : value;
 
-    // Update form state
     setForm((prev) => ({ ...prev, [name]: fieldValue }));
 
-    // Validate field instantly
     const errorMsg = validateField(name, fieldValue);
     setErrors((prev) => ({ ...prev, [name]: errorMsg }));
 
-    // Real-time Employee ID uniqueness check
+    // check Employee ID uniqueness
     if (name === 'employeeCode' && fieldValue.trim()) {
       try {
         const res = await api.get(`/employees/check-id/${fieldValue}`);
@@ -91,13 +74,12 @@ export default function EmployeeForm() {
     }
   };
 
-  // --- Submit handler ---
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     let tempErrors = {};
     Object.entries(form).forEach(([key, value]) => {
-      // Skip address validation
       if (key !== 'address') {
         const msg = validateField(key, value);
         if (msg) tempErrors[key] = msg;
@@ -143,13 +125,7 @@ export default function EmployeeForm() {
       <Box className="form-container">
         <Paper
           elevation={6}
-          sx={{
-            p: 4,
-            borderRadius: 3,
-            maxWidth: 450,
-            width: '100%',
-            textAlign: 'center',
-          }}
+          sx={{  p: 4,  borderRadius: 3,  maxWidth: 450,   width: '100%',  textAlign: 'center', }}
         >
           <Typography variant="h5" sx={{ mb: 3, color: 'primary.dark' }}>
             Add Employee

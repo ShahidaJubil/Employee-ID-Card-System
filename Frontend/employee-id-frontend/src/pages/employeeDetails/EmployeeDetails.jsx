@@ -1,4 +1,4 @@
-import { Grid, Box } from '@mui/material';
+import { Grid } from '@mui/material';
 import IdCard from '../card/IdCard';
 import './EmployeeDetails.css';
 
