@@ -57,9 +57,10 @@
     display: block;
   }
 
+  @media (max-width: 768px) {
   .nav-links {
     position: absolute;
-    top: 70px;
+    top: 70px; /* just below navbar */
     right: 0;
     background-color: #0a3d62;
     flex-direction: column;
@@ -67,11 +68,14 @@
     max-height: 0;
     overflow: hidden;
     transition: max-height 0.3s ease-in;
+    z-index: 999; 
   }
 
   .nav-links.active {
     max-height: 300px;
   }
+}
+
 
   .nav-links a,
   .signout-btn {
