@@ -16,7 +16,9 @@
   padding: 20px 30px;
   border-radius: 10px;
   width: 800px;
-  max-width: 95%;
+  max-width: 95%;   /* ensures it fits small screens */
+  max-height: 90vh; /* limit height to viewport */
+  overflow-y: auto; /* scroll if content is taller than screen */
   position: relative;
   text-align: left;
   display: flex;
@@ -35,7 +37,9 @@
   border-radius: 50%;
   width: 25px;
   height: 25px;
+  z-index: 10; /* make sure it's above modal content */
 }
+
 
 .details-content {
   display: flex;
@@ -55,4 +59,21 @@
   flex: 1;
   display: flex;
   justify-content: center;
+}
+.employee-info p {
+  margin: 6px 0;         /* vertical spacing between items */
+  font-size: 0.95rem;     /* slightly smaller font */
+  color: #333;            /* softer text color */
+}
+
+.employee-info strong {
+  color: #0b397dff;       /* highlight labels in blue */
+}
+
+/* Center name and info on small screens */
+@media (max-width: 600px) {
+  .employee-info h2 {
+    text-align: center;
+  }
+
 }

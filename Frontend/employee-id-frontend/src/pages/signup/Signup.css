@@ -1,10 +1,12 @@
 .signup-container {
-  height: 100vh;
+  height: 100dvh;
   display: flex;
   justify-content: center;
   align-items: center;
-  background: linear-gradient(135deg,#1b3b5b, #2c7aba,#5887ad);
+ background: linear-gradient(135deg, #0f2027, #203a43, #497689);
+
 }
+
 
 .signup-paper {
   width: 360px;
@@ -36,3 +38,5 @@
 .login-link:hover {
   text-decoration: underline;
 }
+
+

@@ -1,9 +1,19 @@
 import { useState } from 'react';
-import {TextField,Button,Box,Paper,Typography,Stack,} from '@mui/material';
+import {
+  TextField,
+  Button,
+  Box,
+  Paper,
+  Typography,
+  Stack,
+  FormHelperText,
+} from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import api from '../../api';
 import Navbar from '../../components/navbar/Navbar';
 import './EmployeeForm.css';
+import { MdUpload } from "react-icons/md";
+
 
 export default function EmployeeForm() {
   const [form, setForm] = useState({
@@ -18,23 +28,90 @@ export default function EmployeeForm() {
     photo: null,
   });
 
+  const [errors, setErrors] = useState({});
   const navigate = useNavigate();
 
-  const handleChange = e => {
-    const { name, value, files } = e.target;
-    if (name === 'photo') {
-      setForm({ ...form, photo: files[0] });
-    } else {
-      setForm({ ...form, [name]: value });
+  // --- validation logic ---
+  const validateField = (name, value) => {
+    switch (name) {
+      case 'name':
+        if (!value.trim()) return 'Full name is required';
+        if (!/^[a-zA-Z\s]+$/.test(value))
+          return 'Name can contain only letters';
+        return '';
+      case 'designation':
+        return !value.trim() ? 'Designation is required' : '';
+      case 'department':
+        return !value.trim() ? 'Department is required' : '';
+      case 'employeeCode':
+        return !value.trim() ? 'Employee ID is required' : '';
+      case 'contact':
+        if (!value.trim()) return 'Contact number is required';
+        if (!/^\d{10}$/.test(value))
+          return 'Contact must be a 10-digit number';
+        return '';
+      case 'email':
+        if (!value.trim()) return 'Email is required';
+        if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(value))
+          return 'Invalid email format';
+        return '';
+      case 'joiningDate':
+        if (!value) return 'Joining date is required';
+        if (new Date(value) > new Date())
+          return 'Joining date cannot be in the future';
+        return '';
+      default:
+        return '';
     }
   };
 
+  // --- handle changes + real-time validation ---
+  const handleChange = async e => {
+    const { name, value, files } = e.target;
+    const fieldValue = name === 'photo' ? files[0] : value;
+
+    setForm(prev => ({ ...prev, [name]: fieldValue }));
+
+    // validate instantly
+    const errorMsg = validateField(name, fieldValue);
+    setErrors(prev => ({ ...prev, [name]: errorMsg }));
+
+    // unique employee ID check in real-time
+    if (name === 'employeeCode' && fieldValue.trim()) {
+      try {
+        const res = await api.get(`/employees/check-id/${fieldValue}`);
+        if (res.data.exists) {
+          setErrors(prev => ({
+            ...prev,
+            employeeCode: 'Employee ID already exists',
+          }));
+        }
+      } catch (err) {
+        console.error('Error checking Employee ID uniqueness:', err);
+      }
+    }
+  };
+
+  // --- submit handler ---
   const handleSubmit = async e => {
     e.preventDefault();
+
+    let tempErrors = {};
+    Object.entries(form).forEach(([key, value]) => {
+      // skip address validation
+      if (key !== 'address') {
+        const msg = validateField(key, value);
+        if (msg) tempErrors[key] = msg;
+      }
+    });
+
+    if (Object.keys(tempErrors).length > 0) {
+      setErrors(tempErrors);
+      return;
+    }
+
     try {
       const user = JSON.parse(localStorage.getItem('user'));
-      console.log('Logged-in User:', user);
-
 
       const formData = new FormData();
       Object.entries(form).forEach(([key, value]) => {
@@ -43,9 +120,7 @@ export default function EmployeeForm() {
       formData.append('userId', user._id);
 
       await api.post('/employees', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
+        headers: { 'Content-Type': 'multipart/form-data' },
       });
 
       alert('Employee added successfully!');
@@ -77,72 +152,77 @@ export default function EmployeeForm() {
           <Box component="form" onSubmit={handleSubmit}>
             <Stack spacing={2}>
               <TextField
-                label="Full Name"
+                label="Full Name *"
                 name="name"
                 value={form.name}
                 onChange={handleChange}
-                required
                 fullWidth
+                error={!!errors.name}
+                helperText={errors.name}
               />
               <TextField
-                label="Designation"
+                label="Designation *"
                 name="designation"
                 value={form.designation}
                 onChange={handleChange}
-                required
                 fullWidth
+                error={!!errors.designation}
+                helperText={errors.designation}
               />
               <TextField
-                label="Department"
+                label="Department *"
                 name="department"
                 value={form.department}
                 onChange={handleChange}
-                required
                 fullWidth
+                error={!!errors.department}
+                helperText={errors.department}
               />
               <TextField
-                label="Employee ID"
+                label="Employee ID *"
                 name="employeeCode"
                 value={form.employeeCode}
                 onChange={handleChange}
-                required
                 fullWidth
+                error={!!errors.employeeCode}
+                helperText={errors.employeeCode}
               />
               <TextField
-                label="Contact Number"
+                label="Contact Number *"
                 name="contact"
                 value={form.contact}
                 onChange={handleChange}
-                required
                 fullWidth
+                error={!!errors.contact}
+                helperText={errors.contact}
               />
               <TextField
-                label="Email"
+                label="Email *"
                 name="email"
                 type="email"
                 value={form.email}
                 onChange={handleChange}
-                required
                 fullWidth
+                error={!!errors.email}
+                helperText={errors.email}
               />
               <TextField
                 label="Address"
                 name="address"
                 value={form.address}
                 onChange={handleChange}
-                required
                 fullWidth
               />
-
               <TextField
-                label="Joining Date"
+                label="Joining Date *"
                 name="joiningDate"
                 type="date"
                 value={form.joiningDate}
                 onChange={handleChange}
-                required
                 fullWidth
                 InputLabelProps={{ shrink: true }}
+                error={!!errors.joiningDate}
+                helperText={errors.joiningDate}
               />
 
               <Button
@@ -155,7 +235,9 @@ export default function EmployeeForm() {
                   justifyContent: 'flex-start',
                 }}
               >
+                
                 {form.photo ? form.photo.name : 'Upload Photo'}
+                &nbsp; &nbsp; <MdUpload size={18} color="#1b3b5b" />
                 <input
                   type="file"
                   name="photo"

@@ -3,6 +3,7 @@ import jsPDF from "jspdf";
 import * as htmlToImage from "html-to-image";
 import "../../index.css";
 import { IoMdDownload } from "react-icons/io";
+import "./IdCard.css";
 
 export default function IdCard({ emp }) {
   const cardRef = useRef();
@@ -10,13 +11,9 @@ export default function IdCard({ emp }) {
   const downloadPDF = async () => {
     try {
       const node = cardRef.current;
-
       const img = node.querySelector("img");
-      if (img && !img.complete) {
-        await new Promise((resolve) => (img.onload = resolve));
-      }
+      if (img && !img.complete) await new Promise(resolve => (img.onload = resolve));
 
-      // convert html to high-quality image
       const dataUrl = await htmlToImage.toPng(node, {
         quality: 1,
         pixelRatio: 4,
@@ -24,15 +21,13 @@ export default function IdCard({ emp }) {
         cacheBust: true,
       });
 
-      // create pdf
       const pdf = new jsPDF("p", "mm", "a4");
       const pdfWidth = pdf.internal.pageSize.getWidth();
       const imgElement = new Image();
       imgElement.src = dataUrl;
-      await new Promise((resolve) => (imgElement.onload = resolve));
+      await new Promise(resolve => (imgElement.onload = resolve));
 
-      const imgHeight =
-        (imgElement.height * (pdfWidth - 30)) / imgElement.width;
+      const imgHeight = (imgElement.height * (pdfWidth - 30)) / imgElement.width;
       pdf.addImage(dataUrl, "PNG", 15, 15, pdfWidth - 30, imgHeight);
       pdf.save("Employee_ID.pdf");
     } catch (err) {
@@ -43,44 +38,10 @@ export default function IdCard({ emp }) {
   if (!emp) return null;
 
   return (
-    <div style={{ textAlign: "center" }}>
-      <div
-        ref={cardRef}
-        style={{
-          width: "300px",
-          height: "450px",
-          background: "#fff",
-          borderRadius: "15px",
-          boxShadow: "0 8px 25px rgba(0,0,0,0.2)",
-          position: "relative",
-          fontFamily: "Poppins, Arial, sans-serif",
-          overflow: "hidden",
-          transform: "translateZ(0)",
-        }}
-      >
-        {/* Curved blue area with photo inside */}
-        <div
-          style={{
-            width: "100%",
-            height: "160px",
-            background: "linear-gradient(135deg, #0a2d61ff, #599fe5ff)",
-            clipPath: "ellipse(85% 100% at 50% 0%)",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "flex-end",
-            paddingBottom: "10px",
-          }}
-        >
-          <div
-            style={{
-              width: "100px",
-              height: "100px",
-              borderRadius: "50%",
-              background: "#fff",
-              padding: "4px",
-              boxShadow: "0 4px 10px rgba(0,0,0,0.3)",
-            }}
-          >
+    <div className="id-card-container">
+      <div ref={cardRef} className="id-card">
+        <div className="id-card-header">
+          <div className="id-card-photo">
             <img
               src={
                 emp.photo
@@ -89,88 +50,29 @@ export default function IdCard({ emp }) {
               }
               alt="Profile"
               crossOrigin="anonymous"
-              style={{
-                width: "100%",
-                height: "100%",
-                borderRadius: "50%",
-                objectFit: "cover",
-              }}
             />
           </div>
         </div>
 
-        {/* Info Section */}
-        <div
-          style={{
-            marginTop: "20px",
-            padding: "0 20px",
-            textAlign: "center",
-          }}
-        >
-          <h2
-            style={{ margin: "10px 0 0 0", fontSize: "20px", color: "#0d47a1" }}
-          >
-            {emp.name?.split(" ")[0]}{" "}
-            <span style={{ color: "#0d47a1", fontWeight: "600" }}>
-              {emp.name?.split(" ")[1] || ""}
-            </span>
+        <div className="id-card-info">
+          <h2>
+            {emp.name?.split(" ")[0]} <span>{emp.name?.split(" ")[1] || ""}</span>
           </h2>
-          <p style={{ margin: "5px 0 10px 0", color: "#777" }}>
-            {emp.designation}
-          </p>
+          <p>{emp.designation}</p>
 
-          <div
-            style={{
-              textAlign: "left",
-              fontSize: "14px",
-              lineHeight: "1.7",
-              marginTop: "10px",
-            }}
-          >
-            <p>
-              <strong>Joining Date:</strong> {emp.joiningDate || "MM/DD/YYYY"}
-            </p>
-            <p>
-              <strong>Mail:</strong> {emp.email}
-            </p>
-            <p>
-              <strong>Phone:</strong> {emp.contact}
-            </p>
-            <p>
-              <strong>EMP ID:</strong> {emp.employeeCode}
-            </p>
+          <div className="id-card-details">
+            <p><strong>Joining Date:</strong> {emp.joiningDate || "MM/DD/YYYY"}</p>
+            <p><strong>Mail:</strong> {emp.email}</p>
+            <p><strong>Phone:</strong> {emp.contact}</p>
+            <p><strong>EMP ID:</strong> {emp.employeeCode}</p>
           </div>
         </div>
 
-        {/* Bottom bar */}
-        <div
-          style={{
-            position: "absolute",
-            bottom: 0,
-            left: 0,
-            width: "100%",
-            height: "28px",
-            background: "#0b397dff",
-            borderTopLeftRadius: "15px",
-            borderTopRightRadius: "15px",
-          }}
-        ></div>
+        <div className="id-card-bottom"></div>
       </div>
 
-      <button
-        onClick={downloadPDF}
-        style={{
-          marginTop: "15px",
-          padding: "10px 20px",
-          background: "#0d47a1",
-          color: "#fff",
-          border: "none",
-          borderRadius: "8px",
-          cursor: "pointer",
-        }}
-      >
-        Download PDF &nbsp;
-        <IoMdDownload />
+      <button className="download-btn" onClick={downloadPDF}>
+        Download PDF &nbsp;<IoMdDownload />
       </button>
     </div>
   );

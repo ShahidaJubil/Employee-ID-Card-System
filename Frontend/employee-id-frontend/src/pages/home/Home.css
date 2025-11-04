@@ -85,7 +85,7 @@
 
 @media (max-width: 480px) {
   .home-container {
-    padding: 0px;
+    padding: 5px;
   }
 
   .employee-table th,
