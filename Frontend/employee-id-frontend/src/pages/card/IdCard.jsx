@@ -29,8 +29,16 @@ export default function IdCard({ emp }) {
       imgElement.src = dataUrl;
       await new Promise(resolve => (imgElement.onload = resolve));
 
-      const imgHeight = (imgElement.height * (pdfWidth - 30)) / imgElement.width;
-      pdf.addImage(dataUrl, "PNG", 15, 15, pdfWidth - 30, imgHeight);
+      // Scale down the ID card size for realistic look
+      const cardWidth = 85; 
+      const cardHeight = (imgElement.height * cardWidth) / imgElement.width;
+
+      // Center the card on the PDF page
+      const x = (pdf.internal.pageSize.getWidth() - cardWidth) / 2;
+      const y = (pdf.internal.pageSize.getHeight() - cardHeight) / 2;
+
+      pdf.addImage(dataUrl, "PNG", x, y, cardWidth, cardHeight);
+
       pdf.save("Employee_ID.pdf");
     } catch (err) {
       console.error("Error generating PDF:", err);
