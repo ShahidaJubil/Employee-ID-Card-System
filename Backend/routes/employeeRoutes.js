@@ -32,7 +32,7 @@ router.post("/", upload.single("photo"), async (req, res) => {
     res.status(500).json({ error: "Error adding employee" });
   }
 });
-// ✅ Check if Employee ID already exists
+//  Check if Employee ID already exists
 router.get("/check-id/:employeeCode", async (req, res) => {
   try {
     const existingEmp = await Employee.findOne({

@@ -4,6 +4,8 @@ import * as htmlToImage from "html-to-image";
 import "../../index.css";
 import { IoMdDownload } from "react-icons/io";
 import "./IdCard.css";
+import defaultImage from '../../assets/profile-pic.jpg';
+
 
 export default function IdCard({ emp }) {
   const cardRef = useRef();
@@ -43,11 +45,13 @@ export default function IdCard({ emp }) {
         <div className="id-card-header">
           <div className="id-card-photo">
             <img
-              src={
-                emp.photo
-                  ? `${process.env.REACT_APP_API_URL || "http://localhost:5000"}/uploads/${emp.photo}`
-                  : "/default-avatar.png"
-              }
+              // src={
+              //   emp.photo
+              //     ? `${process.env.REACT_APP_API_URL || "http://localhost:5000"}/uploads/${emp.photo}`
+              //     : defaultImage
+              // }
+              // src={emp.photo ? `/uploads/${emp.photo}`|| "http://localhost:5000" : defaultImage}
+                src={emp.photo ? `/uploads/${emp.photo}` : defaultImage}
               alt="Profile"
               crossOrigin="anonymous"
             />
