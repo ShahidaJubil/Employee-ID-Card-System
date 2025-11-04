@@ -6,14 +6,12 @@ import {
   Paper,
   Typography,
   Stack,
-  FormHelperText,
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import api from '../../api';
 import Navbar from '../../components/navbar/Navbar';
 import './EmployeeForm.css';
 import { MdUpload } from "react-icons/md";
-
 
 export default function EmployeeForm() {
   const [form, setForm] = useState({
@@ -31,7 +29,7 @@ export default function EmployeeForm() {
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
 
-  // --- validation logic ---
+  // --- Validation logic ---
   const validateField = (name, value) => {
     switch (name) {
       case 'name':
@@ -65,23 +63,24 @@ export default function EmployeeForm() {
     }
   };
 
-  // --- handle changes + real-time validation ---
-  const handleChange = async e => {
+  // --- Handle changes + real-time validation + unique ID check ---
+  const handleChange = async (e) => {
     const { name, value, files } = e.target;
     const fieldValue = name === 'photo' ? files[0] : value;
 
-    setForm(prev => ({ ...prev, [name]: fieldValue }));
+    // Update form state
+    setForm((prev) => ({ ...prev, [name]: fieldValue }));
 
-    // validate instantly
+    // Validate field instantly
     const errorMsg = validateField(name, fieldValue);
-    setErrors(prev => ({ ...prev, [name]: errorMsg }));
+    setErrors((prev) => ({ ...prev, [name]: errorMsg }));
 
-    // unique employee ID check in real-time
+    // Real-time Employee ID uniqueness check
     if (name === 'employeeCode' && fieldValue.trim()) {
       try {
         const res = await api.get(`/employees/check-id/${fieldValue}`);
         if (res.data.exists) {
-          setErrors(prev => ({
+          setErrors((prev) => ({
             ...prev,
             employeeCode: 'Employee ID already exists',
           }));
@@ -92,13 +91,13 @@ export default function EmployeeForm() {
     }
   };
 
-  // --- submit handler ---
-  const handleSubmit = async e => {
+  // --- Submit handler ---
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     let tempErrors = {};
     Object.entries(form).forEach(([key, value]) => {
-      // skip address validation
+      // Skip address validation
       if (key !== 'address') {
         const msg = validateField(key, value);
         if (msg) tempErrors[key] = msg;
@@ -127,7 +126,14 @@ export default function EmployeeForm() {
       navigate('/home');
     } catch (err) {
       console.error(err);
-      alert('Error adding employee');
+      if (err.response?.data?.error === "Employee ID already exists") {
+        setErrors((prev) => ({
+          ...prev,
+          employeeCode: "Employee ID already exists",
+        }));
+      } else {
+        alert('Error adding employee');
+      }
     }
   };
 
@@ -235,9 +241,8 @@ export default function EmployeeForm() {
                   justifyContent: 'flex-start',
                 }}
               >
-                
                 {form.photo ? form.photo.name : 'Upload Photo'}
-                &nbsp; &nbsp; <MdUpload size={18} color="#1b3b5b" />
+                &nbsp;&nbsp; <MdUpload size={18} color="#1b3b5b" />
                 <input
                   type="file"
                   name="photo"

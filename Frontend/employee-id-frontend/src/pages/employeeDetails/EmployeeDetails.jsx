@@ -11,7 +11,7 @@ export default function EmployeeDetails({ emp, closeDetails }) {
         <div className="details-content">
           <Grid container spacing={2}>
             {/* Employee Info */}
-            <Grid item xs={12} md={6}>
+            <Grid item xs={12} md={6}lg={8}xl={8}>
               <div className="employee-info">
                 <h2>{emp.name}</h2>
                 <p><strong>Designation:</strong> {emp.designation}</p>
@@ -25,7 +25,7 @@ export default function EmployeeDetails({ emp, closeDetails }) {
             </Grid>
 
             {/* Employee ID Card */}
-            <Grid item xs={12} md={6}>
+            <Grid item xs={12} md={6} lg={4} xl={4}>
               <div className="employee-idcard">
                 <IdCard emp={emp} />
               </div>

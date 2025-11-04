@@ -59,15 +59,7 @@
   flex: 1;
   display: flex;
   justify-content: center;
-}
-.employee-info p {
-  margin: 6px 0;         /* vertical spacing between items */
-  font-size: 0.95rem;     /* slightly smaller font */
-  color: #333;            /* softer text color */
-}
-
-.employee-info strong {
-  color: #0b397dff;       /* highlight labels in blue */
+  align-items: center; /* vertically center */
 }
 
 /* Center name and info on small screens */

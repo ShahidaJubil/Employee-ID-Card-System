@@ -39,41 +39,26 @@ export default function Signup() {
   };
 
   //  Instant validation for all fields (email included)
-  const handleBlur = async (e) => {
-    const { name, value } = e.target;
-    let message = "";
+  const handleBlur = (e) => {
+  const { name, value } = e.target;
+  let message = "";
 
-    if (name === "email") {
-      // Check email format first
-      if (!validateEmail(value)) {
-        message = "Please enter a valid email address.";
-      } else {
-        // Ping backend signup to see if it returns "User already exists"
-        try {
-          await api.post("/auth/signup", {
-            email: value,
-            password: "Temp1234", // dummy valid password
-            confirmPassword: "Temp1234",
-          });
-        } catch (err) {
-          if (err.response?.data?.message === "User already exists") {
-            message = "Email already exists. Please login instead.";
-          }
-        }
-      }
-    }
+  if (name === "email" && !validateEmail(value)) {
+    message = "Please enter a valid email address.";
+  }
 
-    if (name === "password" && !validatePassword(value)) {
-      message =
-        "Password must be at least 8 characters long and include both letters and numbers.";
-    }
+  if (name === "password" && !validatePassword(value)) {
+    message =
+      "Password must be at least 8 characters long and include both letters and numbers.";
+  }
 
-    if (name === "confirmPassword" && value !== form.password) {
-      message = "Passwords do not match.";
-    }
+  if (name === "confirmPassword" && value !== form.password) {
+    message = "Passwords do not match.";
+  }
 
-    setErrors((prev) => ({ ...prev, [name]: message }));
-  };
+  setErrors((prev) => ({ ...prev, [name]: message }));
+};
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
